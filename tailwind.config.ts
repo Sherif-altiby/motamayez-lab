@@ -11,8 +11,9 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        display: ["var(--font-tajawal)", "Tajawal", "sans-serif"],
-        body: ["var(--font-tajawal)", "Tajawal", "sans-serif"],
+        sans: ["var(--font-cairo)", "Cairo", "sans-serif"],
+        display: ["var(--font-cairo)", "Cairo", "sans-serif"],
+        body: ["var(--font-cairo)", "Cairo", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
