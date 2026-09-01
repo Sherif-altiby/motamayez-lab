@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { DataTable, type DataTableColumn } from "@/components/data-table";
 import { Badge } from "@/components/ui/badge";
 import { PatientResultsDialog } from "@/components/patient-results-dialog";
 import {
@@ -48,6 +48,34 @@ export function PatientsManager({ ownerType, ownerId }: { ownerType: "doctor" | 
   const patients = db.patients
     .filter((p) => p.ownerType === ownerType && p.ownerId === ownerId)
     .filter((p) => p.name.includes(query) || p.phone.includes(query));
+
+  const patientColumns: DataTableColumn<Patient>[] = [
+    { header: "اسم المريض", accessor: (patient) => <span className="font-semibold">{patient.name}</span> },
+    { header: "رقم الهاتف", accessor: (patient) => <span dir="ltr" className="text-right">{patient.phone}</span>, cellClassName: "text-right" },
+    { header: "السن", accessor: (patient) => patient.age },
+    {
+      header: "النتائج",
+      accessor: (patient) => (
+        <Badge variant={patient.results.length ? "success" : "outline"} className="gap-1">
+          <FileText className="h-3 w-3" /> {patient.results.length}
+        </Badge>
+      ),
+    },
+  ];
+
+  const patientActions = (patient: Patient) => (
+    <>
+      <Button variant="outline" size="sm" onClick={() => setResultsPatient(patient)}>
+        النتائج
+      </Button>
+      <Button variant="ghost" size="icon" onClick={() => openEdit(patient)} aria-label="تعديل">
+        <Pencil className="h-4 w-4" />
+      </Button>
+      <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(patient)} aria-label="حذف">
+        <Trash2 className="h-4 w-4 text-destructive" />
+      </Button>
+    </>
+  );
 
   function openAdd() {
     setEditing(null);
@@ -116,44 +144,18 @@ export function PatientsManager({ ownerType, ownerId }: { ownerType: "doctor" | 
               </Button>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>اسم المريض</TableHead>
-                  <TableHead>رقم الهاتف</TableHead>
-                  <TableHead>السن</TableHead>
-                  <TableHead>النتائج</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {patients.map((p) => (
-                  <TableRow key={p.id}>
-                    <TableCell className="font-semibold">{p.name}</TableCell>
-                    <TableCell dir="ltr" className="text-right">{p.phone}</TableCell>
-                    <TableCell>{p.age}</TableCell>
-                    <TableCell>
-                      <Badge variant={p.results.length ? "success" : "outline"} className="gap-1">
-                        <FileText className="h-3 w-3" /> {p.results.length}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex justify-end gap-1">
-                        <Button variant="outline" size="sm" onClick={() => setResultsPatient(p)}>
-                          النتائج
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => openEdit(p)} aria-label="تعديل">
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(p)} aria-label="حذف">
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <DataTable
+              columns={patientColumns}
+              data={patients}
+              rowKey={(patient) => patient.id}
+              actions={patientActions}
+              emptyState={
+                <div className="flex flex-col items-center gap-2 py-16 text-center">
+                  <Users className="h-10 w-10 text-muted-foreground/40" />
+                  <p className="text-sm text-muted-foreground">لا يوجد مرضى بعد</p>
+                </div>
+              }
+            />
           )}
         </CardContent>
       </Card>
