@@ -9,7 +9,7 @@ const navItems: NavItem[] = [
   { href: "/admin/doctors", label: "الدكاترة", icon: <Stethoscope className="h-4 w-4" /> },
   { href: "/admin/labs", label: "معامل التحاليل", icon: <FlaskConical className="h-4 w-4" /> },
   { href: "/admin/patients", label: "كل المرضى", icon: <Users className="h-4 w-4" /> },
-  // { href: "/admin/profile", label: "الملف الشخصي", icon: <UserCircle2 className="h-4 w-4" /> },
+  { href: "/admin/profile", label: "الملف الشخصي", icon: <UserCircle2 className="h-4 w-4" /> },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

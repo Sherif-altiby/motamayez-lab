@@ -1,4 +1,3 @@
- 
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
@@ -14,21 +13,25 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
 
 export const metadata: Metadata = {
   title: "المتميز لاب — إدارة التحاليل الطبية",
-  description:
-    "منصة المتميز لاب لإدارة الدكاترة والمعامل والمرضى ونتائج التحاليل",
+  description: "منصة المتميز لاب لإدارة الدكاترة والمعامل والمرضى ونتائج التحاليل",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var stored = localStorage.getItem('theme');
+    var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (theme === 'dark') document.documentElement.classList.add('dark');
+  } catch (e) {}
+})();
+`;
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="ar"
-      dir="rtl"
-      className={ibmPlexSansArabic.variable}
-    >
+    <html lang="ar" dir="rtl" className={ibmPlexSansArabic.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="font-body antialiased">
         <ToastProvider>
           <AuthProvider>{children}</AuthProvider>
@@ -37,4 +40,3 @@ export default function RootLayout({
     </html>
   );
 }
- 

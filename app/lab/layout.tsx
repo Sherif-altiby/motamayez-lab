@@ -11,7 +11,7 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
     <RoleGuard role="lab">
       <DashboardShell navItems={navItems} roleBadge="حساب معمل">
         {children}
-      </DashboardShell>
+      </DashboardShell >
     </RoleGuard>
   );
 }

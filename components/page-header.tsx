@@ -72,8 +72,7 @@ export function PageHeader({
       {/* Action with glass effect */}
       {action && (
         <div className="relative flex shrink-0 items-center gap-2 self-start rounded-xl bg-muted/30 px-1 py-1 backdrop-blur-sm transition-all hover:bg-muted/50 md:self-center">
-          <div className="absolute inset-0 rounded-xl ring-1 ring-primary/5" />
-          {action}
+           {action}
         </div>
       )}
     </div>
